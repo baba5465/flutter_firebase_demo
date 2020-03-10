@@ -1,16 +1,16 @@
+import 'package:firebase_flutter/services/auth.dart';
 import 'package:firebase_flutter/shared/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_flutter/services/auth.dart';
 
-class SignIn extends StatefulWidget {
+class Register extends StatefulWidget {
   final Function toggleView;
-  SignIn({this.toggleView});
+  Register({this.toggleView});
 
   @override
-  _SignInState createState() => _SignInState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
   final AuthService _authService = AuthService();
   final _formKey = GlobalKey<FormState>();
   String email = '';
@@ -25,14 +25,14 @@ class _SignInState extends State<SignIn> {
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
-        title: Text('Sign In'),
+        title: Text('Sign Up'),
         actions: <Widget>[
           FlatButton.icon(
             onPressed: () {
               widget.toggleView();
             },
             icon: Icon(Icons.person),
-            label: Text('Register'),
+            label: Text('Sign In'),
           ),
         ],
       ),
@@ -91,7 +91,8 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
                 obscureText: true,
-                validator: (val) => val.length<6 ? 'Enter the password 6 character long' : null,
+                validator: (val) =>
+                    val.length < 6 ? 'Enter a password 6 character long' : null,
                 onChanged: (val) {
                   setState(() {
                     password = val;
@@ -101,26 +102,27 @@ class _SignInState extends State<SignIn> {
               RaisedButton(
                 color: Colors.brown[200],
                 child: Text(
-                  'Sign In',
+                  'Register',
                   style: TextStyle(
                     color: Colors.white,
                   ),
                 ),
                 onPressed: () async {
-                  if(_formKey.currentState.validate()){
+                  if (_formKey.currentState.validate()) {
                     setState(() {
                       loading = true;
                     });
-                    dynamic result = _authService.signInWithEmailAndPassword(email, password);
-                    if(result == null){
+                    dynamic result = await _authService
+                        .registerWithEmailAndPassword(email, password);
+                    if (result == null) {
                       setState(() {
-                        error = 'Not Able To Sign In Due To Some Error';
+                        error = 'Enter valid Email';
                         loading = false;
                       });
                     }
                   }
                 },
-              )
+              ),
             ],
           ),
         ),
