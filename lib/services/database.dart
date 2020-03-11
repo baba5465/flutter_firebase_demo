@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_flutter/modals/data.dart';
 
 class DatabaseService {
   final String uid;
@@ -17,5 +18,24 @@ class DatabaseService {
       'name': name,
       'strength': strenght,
     });
+  }
+
+  // Get database stream
+
+  Stream<List<Data>> get data {
+    return dbCollection.snapshots()
+    .map(_dataListFromDatabase);
+  }
+
+  // Get List from snapshot
+
+  List<Data> _dataListFromDatabase(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return Data(
+        name: doc.data['name'] ?? '',
+        sugars: doc.data['sugars'] ?? '0',
+        strength: doc.data['strenght'] ?? 0,
+      );
+    }).toList();
   }
 }
