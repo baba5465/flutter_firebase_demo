@@ -100,7 +100,7 @@ class _RegisterState extends State<Register> {
                 },
               ),
               RaisedButton(
-                color: Colors.brown[200],
+                color: Colors.pink[400],
                 child: Text(
                   'Register',
                   style: TextStyle(
